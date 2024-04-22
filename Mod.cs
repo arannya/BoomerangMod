@@ -5,6 +5,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 using StardewValley.GameData.Weapons;
+using StardewValley.Menus;
 using StardewValley.Tools;
 
 namespace Boomerang
@@ -23,7 +24,8 @@ namespace Boomerang
             harmony.Patch(
                 original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.getCategoryName)),
                 prefix: new HarmonyMethod(typeof(Mod), nameof(Mod.getCategoryName_Prefix)));
-
+            
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.Content.AssetRequested += OnAssetRequested;
             helper.Events.Input.ButtonPressed += this.OnButtonPress;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
@@ -38,6 +40,25 @@ namespace Boomerang
                 return false;
             }
             return true;
+        }
+
+        public void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        {
+            if (e.NewMenu is ShopMenu shop)
+            {
+                if (shop.ShopId != Game1.shop_adventurersGuild) return;
+                int index = 0;
+                for (; index < shop.forSale.Count; index++)
+                {
+                    var item = shop.forSale[index];
+                    if (item is not MeleeWeapon)
+                        break;
+                }
+                var boomerangForSale = ItemRegistry.Create(itemID_c);
+                shop.forSale.Insert(index, boomerangForSale);
+                shop.itemPriceAndStock.Add(boomerangForSale,
+                    new ItemStockInformation(500, 1)); // sale price and available stock
+            }
         }
 
         private void OnButtonPress(object sender, ButtonPressedEventArgs e)
@@ -122,21 +143,6 @@ namespace Boomerang
                             Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
                             SpriteIndex = Instance.Thrown != null ? 0 : 1,
                         };
-                    });
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo("Data/Shops"))
-            {
-                e.Edit(
-                    (asset) =>
-                    {
-                        asset.AsDictionary<string, ShopData>().Data[Game1.shop_adventurersGuild]
-                            .Items
-                            .Insert(0, new ShopItemData()
-                            {
-                                ItemId = itemID_c,
-                                Price = 500,
-                                AvailableStock = 1,
-                            });
                     });
             }
         }
