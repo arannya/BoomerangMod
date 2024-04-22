@@ -119,7 +119,7 @@ namespace Boomerang
                                 "Crafted from hardwood, this boomerang embodies the ingenuity needed to thrive in the wilds.",
                             MinDamage = 20,
                             MaxDamage = 30,
-                            Texture = Helper.ModContent.GetInternalAssetName("agissets/bullet.png").ToString(),
+                            Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
                             SpriteIndex = Instance.Thrown != null ? 0 : 1,
                         };
                     });
