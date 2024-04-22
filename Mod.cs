@@ -116,7 +116,7 @@ namespace Boomerang
                             Name = "Wooden Boomerang",
                             DisplayName = "Wooden Boomerang",
                             Description =
-                                "Your foes can run away from their problems... but it'll come right back at 'em!",
+                                "Crafted from hardwood, this boomerang embodies the ingenuity needed to thrive in the wilds.",
                             MinDamage = 20,
                             MaxDamage = 30,
                             Texture = Helper.ModContent.GetInternalAssetName("agissets/bullet.png").ToString(),
