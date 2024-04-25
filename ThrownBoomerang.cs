@@ -81,8 +81,8 @@ namespace Boomerang
 
         public override void draw(SpriteBatch b)
         {
-            var sourceRect = Game1.getSquareSourceRectForNonStandardTileSheet(ItemRegistry.GetData(Mod.itemID_c).GetTexture(), 16, 16, 1);
-            b.Draw(ItemRegistry.GetData(Mod.itemID_c).GetTexture(), Game1.GlobalToLocal(Game1.viewport, this.position.Value + new Vector2(32, 32)), sourceRect, Color.White, this.rotation, new Vector2(8, 8), 4, SpriteEffects.FlipVertically, 1);
+            var sourceRect = Game1.getSquareSourceRectForNonStandardTileSheet(ItemRegistry.GetData(ModEntry.itemID_c).GetTexture(), 16, 16, 1);
+            b.Draw(ItemRegistry.GetData(ModEntry.itemID_c).GetTexture(), Game1.GlobalToLocal(Game1.viewport, this.position.Value + new Vector2(32, 32)), sourceRect, Color.White, this.rotation, new Vector2(8, 8), 4, SpriteEffects.FlipVertically, 1);
             this.rotation += 0.25f;
         }
 

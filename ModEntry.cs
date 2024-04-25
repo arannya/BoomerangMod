@@ -9,20 +9,24 @@ using StardewValley.Tools;
 
 namespace Boomerang
 {
-    internal class Mod : StardewModdingAPI.Mod
+    internal class ModEntry : StardewModdingAPI.Mod
     {
-        public static Mod Instance;
+        public static ModEntry Instance;
         public const String itemID_c = "Arannya.Weapons.Boomerangs.WoodenBoomerang";
         private ThrownBoomerang Thrown;
         
         public override void Entry(IModHelper helper)
         {
-            Mod.Instance = this;
+            ModEntry.Instance = this;
             var harmony = new Harmony(this.ModManifest.UniqueID);
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.getCategoryName)),
-                prefix: new HarmonyMethod(typeof(Mod), nameof(Boomerang.Patches.getCategoryName_Prefix)));
+                prefix: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.getCategoryName_Prefix)));
+            
+            //harmony.Patch(
+            //    original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.drawDuringUse)),
+            //    transpiler: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.Transpiler)));
             
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.Content.AssetRequested += OnAssetRequested;
