@@ -6,6 +6,7 @@ using System.Threading;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.GameData.HomeRenovations;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Tools;
 
 namespace Boomerang
@@ -26,7 +27,7 @@ namespace Boomerang
         {
             bool foundSourceRect = false;
             var locItemID = Boomerang.ModEntry.itemID_c;
-            var funcGetSourceRect = AccessTools.Method(typeof(Rectangle), "GetSourceRect");
+            var funcGetSourceRect = AccessTools.Method(typeof(ParsedItemData), nameof(ParsedItemData.GetSourceRect));
             var codes = new List<CodeInstruction>(instructions);
             var exitPatchLabel = gen.DefineLabel();
             for (var i = 0; i < codes.Count; i++)
@@ -42,6 +43,7 @@ namespace Boomerang
                         yield return new CodeInstruction(OpCodes.Ldarg_S, "weaponItemId");
                         yield return new CodeInstruction(OpCodes.Ldstr, locItemID);
                         yield return new CodeInstruction(OpCodes.Bne_Un_S, exitPatchLabel);
+                        yield return new CodeInstruction(OpCodes.Pop);
                         yield return new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(Rectangle), nameof(Rectangle.Empty)));
                         yield return new CodeInstruction(OpCodes.Stloc_1);
                         foundSourceRect = true;

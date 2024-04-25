@@ -1,5 +1,7 @@
 using System;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -23,9 +25,11 @@ namespace Boomerang
             harmony.Patch(
                 original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.getCategoryName)),
                 prefix: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.getCategoryName_Prefix)));
-            
+
             //harmony.Patch(
-            //    original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.drawDuringUse)),
+            //    original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.drawDuringUse),
+            //        new Type[]{ typeof(int), typeof(int), typeof(SpriteBatch), typeof(Vector2), 
+            //            typeof(Farmer), typeof(string), typeof(int), typeof(bool)}),
             //    transpiler: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.Transpiler)));
             
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
@@ -70,7 +74,7 @@ namespace Boomerang
                             MinDamage = 20,
                             MaxDamage = 30,
                             Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
-                            SpriteIndex = Instance.Thrown != null ? 0 : 1,
+                            SpriteIndex = 1,
                         };
                     });
             }
