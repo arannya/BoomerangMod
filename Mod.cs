@@ -3,7 +3,6 @@ using HarmonyLib;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.GameData.Shops;
 using StardewValley.GameData.Weapons;
 using StardewValley.Menus;
 using StardewValley.Tools;
@@ -23,23 +22,13 @@ namespace Boomerang
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.getCategoryName)),
-                prefix: new HarmonyMethod(typeof(Mod), nameof(Mod.getCategoryName_Prefix)));
+                prefix: new HarmonyMethod(typeof(Mod), nameof(Boomerang.Patches.getCategoryName_Prefix)));
             
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.Content.AssetRequested += OnAssetRequested;
             helper.Events.Input.ButtonPressed += this.OnButtonPress;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Player.Warped += this.OnWarped;
-        }
-        
-        internal static bool getCategoryName_Prefix(MeleeWeapon __instance, ref string __result)
-        {
-            if (__instance.itemId.Value == itemID_c)
-            {
-                __result = "Boomerang";
-                return false;
-            }
-            return true;
         }
 
         public void OnMenuChanged(object sender, MenuChangedEventArgs e)
@@ -58,6 +47,28 @@ namespace Boomerang
                 shop.forSale.Insert(index, boomerangForSale);
                 shop.itemPriceAndStock.Add(boomerangForSale,
                     new ItemStockInformation(500, 1)); // sale price and available stock
+            }
+        }
+        
+        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (e.NameWithoutLocale.IsEquivalentTo("Data/Weapons"))
+            {
+                e.Edit(
+                    (asset) =>
+                    {
+                        asset.AsDictionary<string, WeaponData>().Data[itemID_c] = new()
+                        {
+                            Name = "Wooden Boomerang",
+                            DisplayName = "Wooden Boomerang",
+                            Description =
+                                "Crafted from hardwood, this boomerang embodies the ingenuity needed to thrive in the wilds.",
+                            MinDamage = 20,
+                            MaxDamage = 30,
+                            Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
+                            SpriteIndex = Instance.Thrown != null ? 0 : 1,
+                        };
+                    });
             }
         }
 
@@ -91,7 +102,6 @@ namespace Boomerang
             }
         }
 
-
         private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
         {
             if (this.Thrown is not null)
@@ -122,28 +132,6 @@ namespace Boomerang
             {
                 this.Thrown.Destroyed = true;
                 this.Thrown = null;
-            }
-        }
-
-        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
-        {
-            if (e.NameWithoutLocale.IsEquivalentTo("Data/Weapons"))
-            {
-                e.Edit(
-                    (asset) =>
-                    {
-                        asset.AsDictionary<string, WeaponData>().Data[itemID_c] = new()
-                        {
-                            Name = "Wooden Boomerang",
-                            DisplayName = "Wooden Boomerang",
-                            Description =
-                                "Crafted from hardwood, this boomerang embodies the ingenuity needed to thrive in the wilds.",
-                            MinDamage = 20,
-                            MaxDamage = 30,
-                            Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
-                            SpriteIndex = Instance.Thrown != null ? 0 : 1,
-                        };
-                    });
             }
         }
     }
