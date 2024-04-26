@@ -2,9 +2,11 @@
     "Name": "Boomerangs",
     "Author": "Arannya",
     "Version": "2.0",
-    "UniqueID": "Arannya.Weapons.Boomerangs",
+    "UniqueID": "Arannya.Weapons.Boomerangs.CP",
     "UpdateKeys": ["Nexus:22724"],
-    "EntryDll": "Boomerang.dll",
+    "ContentPackFor": {
+        "UniqueID": "Pathoschild.ContentPatcher"
+    },
     "MinimumGameVersion": "1.6",
     "MinimumApiVersion": "4.0.0"
 }

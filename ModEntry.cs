@@ -33,7 +33,6 @@ namespace Boomerang
                 transpiler: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.Transpiler)));
             
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
-            helper.Events.Content.AssetRequested += OnAssetRequested;
             helper.Events.Input.ButtonPressed += this.OnButtonPress;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Player.Warped += this.OnWarped;
@@ -55,28 +54,6 @@ namespace Boomerang
                 shop.forSale.Insert(index, boomerangForSale);
                 shop.itemPriceAndStock.Add(boomerangForSale,
                     new ItemStockInformation(500, 1)); // sale price and available stock
-            }
-        }
-        
-        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
-        {
-            if (e.NameWithoutLocale.IsEquivalentTo("Data/Weapons"))
-            {
-                e.Edit(
-                    (asset) =>
-                    {
-                        asset.AsDictionary<string, WeaponData>().Data[itemID_c] = new()
-                        {
-                            Name = "Wooden Boomerang",
-                            DisplayName = "Wooden Boomerang",
-                            Description =
-                                "Crafted from hardwood, this boomerang embodies the ingenuity needed to thrive in the wilds.",
-                            MinDamage = 20,
-                            MaxDamage = 30,
-                            Texture = Helper.ModContent.GetInternalAssetName("assets/bullet.png").ToString(),
-                            SpriteIndex = 1,
-                        };
-                    });
             }
         }
 

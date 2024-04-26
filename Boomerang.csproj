@@ -4,6 +4,10 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Folder Include="assets\" />
+  </ItemGroup>
+  
   <PropertyGroup>
     <Version>1.0</Version>
     <RunWorkingDirectory>/Applications/Stardew Valley.app/Contents/MacOS/</RunWorkingDirectory>
