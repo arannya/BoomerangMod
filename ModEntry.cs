@@ -26,11 +26,11 @@ namespace Boomerang
                 original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.getCategoryName)),
                 prefix: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.getCategoryName_Prefix)));
 
-            //harmony.Patch(
-            //    original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.drawDuringUse),
-            //        new Type[]{ typeof(int), typeof(int), typeof(SpriteBatch), typeof(Vector2), 
-            //            typeof(Farmer), typeof(string), typeof(int), typeof(bool)}),
-            //    transpiler: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.Transpiler)));
+            harmony.Patch(
+                original: AccessTools.Method(typeof(MeleeWeapon), nameof(MeleeWeapon.drawDuringUse),
+                    new Type[]{ typeof(int), typeof(int), typeof(SpriteBatch), typeof(Vector2), 
+                        typeof(Farmer), typeof(string), typeof(int), typeof(bool)}),
+                transpiler: new HarmonyMethod(typeof(Boomerang.Patches), nameof(Boomerang.Patches.Transpiler)));
             
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.Content.AssetRequested += OnAssetRequested;
@@ -95,7 +95,6 @@ namespace Boomerang
                     return;
                 
                 this.Thrown = new ThrownBoomerang(Game1.player, e.Cursor.AbsolutePixels);
-                Helper.GameContent.InvalidateCache("Data/Weapons");
                 Game1.playSound("throw");
                 Game1.currentLocation.projectiles.Add(this.Thrown);
             }
@@ -129,7 +128,6 @@ namespace Boomerang
                 if (this.Thrown.Destroyed)
                 {
                     this.Thrown = null;
-                    Helper.GameContent.InvalidateCache("Data/Weapons");
                 }
             }
         }
