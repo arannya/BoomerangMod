@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Threading;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewValley;
 using StardewValley.GameData.HomeRenovations;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Tools;
@@ -26,7 +27,7 @@ namespace Boomerang
         internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
         {
             bool foundSourceRect = false;
-            var locItemID = "(W)" + Boomerang.ModEntry.itemID_c;
+            var locItemID = ItemRegistry.type_weapon + Boomerang.ModEntry.itemID_c;
             var funcGetSourceRect = AccessTools.Method(typeof(ParsedItemData), nameof(ParsedItemData.GetSourceRect));;
             var codes = new List<CodeInstruction>(instructions);
             var exitPatchLabel = gen.DefineLabel();
